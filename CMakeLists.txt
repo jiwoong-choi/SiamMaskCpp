@@ -28,4 +28,5 @@ include_directories(
 
 add_executable(demo demo.cpp)
 target_link_libraries(demo ${OpenCV_LIBRARIES} ${TORCH_LIBRARIES})
-set_property(TARGET demo PROPERTY CXX_STANDARD 11)
+set_property(TARGET demo PROPERTY CXX_STANDARD 14)
+set(EXECUTABLE_OUTPUT_PATH "..")
