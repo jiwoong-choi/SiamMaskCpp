@@ -1,11 +1,15 @@
 #ifndef SIAMMASK_STATE_Hh
 #define SIAMMASK_STATE_Hh
 
+#include <queue>
 #include <opencv2/core.hpp>
 #include <torch/types.h>
 #include <nlohmann/json.hpp>
 
 struct State {
+    size_t max_queue_size = 0;
+    std::deque<cv::Mat> mask_queue;
+    std::vector<float> mask_weights;
 
     // Default hyper-parameters
     float penalty_k = 0.09;

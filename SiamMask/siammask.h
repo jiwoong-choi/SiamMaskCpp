@@ -340,6 +340,20 @@ inline void siameseTrack(
     cv::Rect mask_roi = translateRect(mask_subpos, -mask_pos.tl());
     mask_chip(mask_roi).copyTo(mask_in_img(mask_subpos));
 
+    if (state.max_queue_size > 1) {
+        state.mask_queue.push_back(mask_in_img);
+        if (state.mask_queue.size() > state.max_queue_size) {
+            state.mask_queue.pop_front();
+        }
+        cv::Mat sum = cv::Mat::zeros(mask_in_img.size(), mask_in_img.type());
+        float wsum = 0;
+        for(size_t i = 0; i < state.mask_queue.size(); ++i) {
+            sum += state.mask_queue[i] * state.mask_weights[i];
+            wsum += state.mask_weights[i];
+        }
+        mask_in_img = sum / wsum;
+    }
+
     cv::threshold(mask_in_img, state.mask, state.seg_thr, 255, cv::THRESH_BINARY);
     state.mask.convertTo(state.mask, CV_8UC1);
 
